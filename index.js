@@ -3,6 +3,7 @@
 // We will disable any rules that are inconvenient and unimportant. A
 // consistent codebase (in addition to Prettier), a low learning curve and
 // developer speed are important factors being considered.
+const path = require('path')
 
 require('dotenv-flow').config({
   silent: true,
@@ -46,6 +47,12 @@ const checkGraphqlConfig = () => {
   return Boolean(config)
 }
 const hasGraphqlConfig = checkGraphqlConfig()
+const hasDependency = (dependency) => {
+  const packageJson = require(path.resolve(process.cwd(), 'package.json'))
+
+  return packageJson.dependencies[dependency] !== undefined
+}
+const hasReactNative = hasDependency('react-native')
 
 module.exports = {
   root: true,
@@ -70,8 +77,14 @@ module.exports = {
     'plugin:you-dont-need-lodash-underscore/compatible',
     // https://github.com/cypress-io/eslint-plugin-cypress#rules
     'plugin:cypress/recommended',
+    // https://github.com/Intellicode/eslint-plugin-react-native
+    ...(hasReactNative ? ['plugin:react-native/all'] : []),
   ],
-  plugins: ['no-only-tests', ...(hasGraphqlConfig ? ['graphql'] : [])],
+  plugins: [
+    'no-only-tests',
+    ...(hasGraphqlConfig ? ['graphql'] : []),
+    ...(hasReactNative ? ['react-native'] : []),
+  ],
   rules: {
     'graphql/template-strings': hasGraphqlConfig
       ? [
@@ -296,6 +309,9 @@ module.exports = {
     'import/no-useless-path-segments': 'warn',
     // Shorter, no useless var, and not really a big difference
     'import/no-anonymous-default-export': 'off',
+
+    // This gets in the way a lot
+    'react-native/sort-styles':'off',
 
     // endregion
 
