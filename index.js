@@ -338,6 +338,9 @@ module.exports = {
     'react/no-unescaped-entities': 0,
 
     'prettier/prettier': CHECK_CODESTYLE ? 'warn' : 'off',
+
+    // "only" filter for tests are commonly used during development and rarely desired in git (use .skip instead)
+    'no-only-tests/no-only-tests': 'error',
   },
   overrides: [
     {
