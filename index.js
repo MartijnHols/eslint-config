@@ -71,7 +71,7 @@ module.exports = {
     // https://github.com/cypress-io/eslint-plugin-cypress#rules
     'plugin:cypress/recommended',
   ],
-  plugins: hasGraphqlConfig ? ['graphql'] : [],
+  plugins: ['no-only-tests', ...(hasGraphqlConfig ? ['graphql'] : [])],
   rules: {
     'graphql/template-strings': hasGraphqlConfig
       ? [
