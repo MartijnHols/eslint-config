@@ -117,22 +117,6 @@ module.exports = {
       },
     ],
 
-    "no-restricted-globals": [
-      "error",
-      {
-          "name": "window",
-          "message": "Use @emico/ssr-utils globalWindow"
-      },
-      {
-          "name": "document",
-          "message": "Use @emico/ssr-utils document"
-      },
-      {
-          "name": "localStorage",
-          "message": "Use @emico/ssr-utils localStorage"
-      },
-    ],
-    
     'no-restricted-syntax': [
       'warn',
       'WithStatement',
