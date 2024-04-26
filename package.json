@@ -1,47 +1,37 @@
 {
   "name": "@martijnhols/eslint-config",
-  "description": "Emico ESLint config for consistent code style and code quality.",
   "main": "index.js",
-  "repository": "https://github.com/EmicoEcommerce/eslint-config",
-  "author": "Emico <info@emico.nl>",
   "license": "MIT",
   "version": "5.1.0",
   "files": [
     "index.js"
   ],
   "dependencies": {
-    "@typescript-eslint/eslint-plugin": "5.x",
-    "@typescript-eslint/parser": "5.x",
+    "@typescript-eslint/eslint-plugin": "^7.5.0",
+    "@typescript-eslint/parser": "^7.5.0",
     "confusing-browser-globals": "^1.0.9",
-    "dotenv-flow": "^3.2.0",
-    "eslint": "^7.0.0",
-    "eslint-config-prettier": "^8.3.0",
-    "eslint-config-react-app": "^7.0.0",
-    "eslint-plugin-cypress": "^2.11.2",
-    "eslint-plugin-flowtype": "^8.0.3",
-    "eslint-plugin-graphql": "^4.0.0",
-    "eslint-plugin-import": "2.x",
+    "dotenv-flow": "^4.1.0",
+    "eslint": "^8.57.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-cypress": "^3.0.2",
+    "eslint-plugin-import": "^2.29.1",
     "eslint-plugin-jsx-a11y": "6.x",
-    "eslint-plugin-no-only-tests": "^2.6.0",
-    "eslint-plugin-prettier": "^4.0.0",
-    "eslint-plugin-react": "7.x",
+    "eslint-plugin-no-only-tests": "^3.1.0",
+    "eslint-plugin-prettier": "^5.1.3",
+    "eslint-plugin-react": "^7.34.1",
     "eslint-plugin-react-hooks": "4.x",
     "eslint-plugin-react-native": "^4.0.0",
     "eslint-plugin-you-dont-need-lodash-underscore": "^6.10.0"
   },
-  "optionalDependencies": {
-    "graphql-config": "^3.2.0"
-  },
   "devDependencies": {
-    "graphql": "^0.11.0 || ^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0",
-    "prettier": "^2.1.2",
+    "prettier": "^3.2.5",
     "typescript": "*"
+  },
+  "peerDependencies": {
+    "eslint": ">= 8"
   },
   "peerDependenciesMeta": {
     "typescript": {
-      "optional": true
-    },
-    "graphql": {
       "optional": true
     }
   },

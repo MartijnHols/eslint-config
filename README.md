@@ -1,20 +1,20 @@
-# @emico/eslint-config
+# @martijnhols/eslint-config
 
-This package includes the shareable ESLint configuration used in all SPA-related Emico projects.
+This package includes my shareable ESLint configuration.
 
 ## Usage
 
 To use this configuration first install this package:
 
 ```sh
-yarn add -D @emico/eslint-config
+yarn add -D @martijnhols/eslint-config
 ```
 
 Then add this to your `package.json`:
 
 ```json
     "eslintConfig": {
-        "extends": "@emico/eslint-config"
+        "extends": "@martijnhols/eslint-config"
     },
 ```
 
@@ -22,13 +22,14 @@ The `eslintConfig` property is used by create-react-app, IDE extensions and seem
 
 ## Customization
 
-Customization is not recommended as all Emico projects should use the same configuration. Please consider making a pull request to this package instead.
+Customization is not recommended. Please consider making a pull request to this
+package instead.
 
 To apply custom rules remove the eslint configuration from your `package.json`, then create a file named `.eslintrc.json` with following contents in the root folder of your project:
 
 ```json
 {
-  "extends": "@emico/eslint-config"
+  "extends": "@martijnhols/eslint-config"
 }
 ```
 
@@ -40,4 +41,3 @@ These options can be enabled/disabled using env variables.
 
 `CODE_STYLE` Enable or disable code style rules in eslint. These rules are
 automatically fixable, so this can be run in a precommit hook with `--fix`.
-`EMICO_COMPONENT_LIBRARY` Enable or disable Emico internal component library rules

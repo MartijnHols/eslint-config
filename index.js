@@ -17,36 +17,7 @@ require('dotenv-flow').config({
 // separate output because the formatting of eslint is more readable, and they
 // both indicate issues in the way code is written that need to be fixed.
 const CHECK_CODESTYLE = process.env.CODE_STYLE === 'true'
-const ENABLE_EMICO_COMPONENT_LIBRARY =
-  process.env.EMICO_COMPONENT_LIBRARY === 'true'
-// When using GraphQL but not Apollo. See https://github.com/apollographql/eslint-plugin-graphql#common-options
-const GRAPHQL_ENVIRONMENT = process.env.GRAPHQL_ENVIRONMENT || 'apollo'
 
-const optionalRequire = (name) => {
-  try {
-    return require(name)
-  } catch (er) {
-    return undefined
-  }
-}
-// Check if GraphQL config is available to determine if we can enable GraphQL
-// linting rules. graphql/template-strings throws when there's no config.
-const checkGraphqlConfig = () => {
-  const hasGraphql = optionalRequire('graphql')
-  if (!hasGraphql) {
-    return false
-  }
-  const graphqlConfig = optionalRequire('graphql-config')
-  if (!graphqlConfig) {
-    return false
-  }
-  const config = graphqlConfig.loadConfigSync({
-    throwOnMissing: false,
-    throwOnEmpty: false,
-  })
-  return Boolean(config)
-}
-const hasGraphqlConfig = checkGraphqlConfig()
 const hasDependency = (dependency) => {
   const packageJson = require(path.resolve(process.cwd(), 'package.json'))
 
@@ -57,11 +28,10 @@ const hasReactNative = hasDependency('react-native')
 module.exports = {
   root: true,
   extends: [
-    'react-app',
     // https://github.com/eslint/eslint/blob/master/conf/eslint-recommended.js
     'eslint:recommended',
-    // https://github.com/yannickcr/eslint-plugin-react/blob/master/index.js#L115
-    'plugin:react/recommended',
+    'plugin:import/recommended',
+    'plugin:import/typescript',
     // https://github.com/typescript-eslint/typescript-eslint/blob/master/packages/eslint-plugin/src/configs/eslint-recommended.ts
     'plugin:@typescript-eslint/eslint-recommended',
     // https://github.com/typescript-eslint/typescript-eslint/blob/master/packages/eslint-plugin/src/configs/recommended.json
@@ -75,26 +45,15 @@ module.exports = {
     // reasons why.
     // https://github.com/you-dont-need/You-Dont-Need-Lodash-Underscore/blob/master/lib/rules/all.js
     'plugin:you-dont-need-lodash-underscore/compatible',
+    // https://github.com/yannickcr/eslint-plugin-react/blob/master/index.js#L115
+    'plugin:react/recommended',
     // https://github.com/cypress-io/eslint-plugin-cypress#rules
     'plugin:cypress/recommended',
     // https://github.com/Intellicode/eslint-plugin-react-native
     ...(hasReactNative ? ['plugin:react-native/all'] : []),
   ],
-  plugins: [
-    'no-only-tests',
-    ...(hasGraphqlConfig ? ['graphql'] : []),
-    ...(hasReactNative ? ['react-native'] : []),
-  ],
+  plugins: ['no-only-tests', ...(hasReactNative ? ['react-native'] : [])],
   rules: {
-    'graphql/template-strings': hasGraphqlConfig
-      ? [
-          'error',
-          {
-            env: GRAPHQL_ENVIRONMENT,
-          },
-        ]
-      : 'off',
-
     // region Syntax
 
     // Codebase consistency and ease of use
@@ -195,35 +154,6 @@ module.exports = {
 
     // endregion
 
-    // region enforce emico components
-
-    'react/forbid-elements': ENABLE_EMICO_COMPONENT_LIBRARY
-      ? [
-          'error',
-          {
-            forbid: [
-              {
-                element: 'img',
-                message:
-                  'use <Image> instead so that the correct image CDN is used',
-              },
-              {
-                element: 'a',
-                message:
-                  'use <Link> instead to make sure internal linking works, and analytics is working as expected',
-              },
-              {
-                element: 'button',
-                message:
-                  'use <ButtonPrimary> or <ButtonSecondary> instead to make sure the correct styling is used, or use <ButtonUnstyled> as a base',
-              },
-            ],
-          },
-        ]
-      : 'off',
-
-    // endregion
-
     // region Code style
 
     // Disable specific member delimiter style for interfaces and type literals.
@@ -276,7 +206,7 @@ module.exports = {
     ],
 
     // Parameter properties can be confusing to those new to TypeScript as they are less explicit than other ways of declaring and initializing class members.
-    '@typescript-eslint/no-parameter-properties': 'error',
+    '@typescript-eslint/parameter-properties': 'error',
 
     'import/order': [
       // This is an annoying code style rule that can be fixed automatically.
@@ -286,17 +216,10 @@ module.exports = {
         groups: [
           ['external', 'builtin'],
           'internal',
-          ['parent', 'sibling', 'index'],
+          'parent',
+          ['sibling', 'index'],
         ],
-        pathGroups: [
-          {
-            pattern: '@emico/**',
-            group: 'internal',
-            position: 'after',
-          },
-        ],
-        pathGroupsExcludedImportTypes: ['builtin'],
-        'newlines-between': 'always',
+        'newlines-between': 'never',
         alphabetize: {
           order: 'asc',
           caseInsensitive: true,
@@ -311,14 +234,13 @@ module.exports = {
     'import/no-anonymous-default-export': 'off',
 
     // This gets in the way a lot
-    'react-native/sort-styles':'off',
+    'react-native/sort-styles': 'off',
 
     // endregion
 
     // Every dependency should be in the package.json
     'import/no-extraneous-dependencies': 'warn',
 
-    // For example see https://git.emico.nl/magento-2/react-components/commit/28bea2e284ee51ca3f7db9a17894d50c68250789
     'no-restricted-imports': [
       'error',
       {
